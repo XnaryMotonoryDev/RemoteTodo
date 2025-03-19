@@ -24,8 +24,9 @@ class Command():
     def __show_description(self):
         print(self.description)
 
-    def add_command(self, command: str, _help: str, action = None):
+    def add_command(self, command: str, arg: str, _help: str, action = None):
         self.commands[command] = {
+            'args': arg.upper(),
             'help': _help,
             'action': action
         }
@@ -33,11 +34,13 @@ class Command():
     def show_commands(self):
         print("Available commands:")
 
-        for cmd, info in self.commands.items():
-            print(f"\t{cmd}:\t{info['help']}")
-
         for cmd, info in self.system_commands.items():
             print(f"\t{cmd}:\t{info['help']}")
+
+        print('\n')
+
+        for cmd, info in self.commands.items():
+            print(f"\t{cmd} [{info['args']}]:\t{info['help']}")
 
     def execute(self, command: str, *args):
         if command in self.system_commands:
