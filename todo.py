@@ -1,3 +1,4 @@
+from todoist_api_python.models import Project, Task
 from todoist_api_python.api import TodoistAPI
 from todo_tracker import TodoTracker
 from commands import Command
@@ -32,9 +33,11 @@ if __name__ == "__main__":
 
     cmd = Command("Welcome to remote Todoist program. Enter the help for hint")
 
-    cmd.add_command('list', '', "List todos", tracker.list_todos)
-    cmd.add_command('create', 'name', "Create todo", tracker.create_todo)
-    cmd.add_command('delete', 'id', "Delete todo", tracker.delete_todo)
+    cmd.add_command('list', _help="List todos", description=
+                    "Print the names of all projects made. For more information use the info command", action=tracker.list_todos)
+    cmd.add_command('create', keys=['-t'], args=['name', 'id'], _help="Create todo", action=tracker.create_todos)
+    cmd.add_command('info',  _help="Check your tasks", action=tracker.show_propertiese)
+    cmd.add_command('delete', args=['id'], _help="Delete todo", action=tracker.delete_todo)
 
 
     while True:
@@ -49,6 +52,9 @@ if __name__ == "__main__":
 
         match command.lower():
             case 'create':
-                print(f"Проект: {result.name} создан. (ID: {result.id})")
+                if isinstance(result, Project):
+                    print(f"Project created: {result.name}. (ID: {result.id})")
+                elif isinstance(result, Task):
+                    print(f"Task created {result.content}")
             case 'list':
-                print(f"All available todos\n{result}")
+                print(f"All available todos\n{result}" if result else "No project found.")

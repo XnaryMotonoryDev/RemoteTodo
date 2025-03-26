@@ -24,10 +24,12 @@ class Command():
     def __show_description(self):
         print(self.description)
 
-    def add_command(self, command: str, arg: str, _help: str, action = None):
+    def add_command(self, command: str, keys: str | list[str] = '', args: str | list[str] = '', _help: str = '', description: str = '', action = None):
         self.commands[command] = {
-            'args': arg.upper(),
+            'keys': [key for key in keys],
+            'args': [arg.upper() for arg in args],
             'help': _help,
+            'desc': description,
             'action': action
         }
 
@@ -37,12 +39,27 @@ class Command():
         for cmd, info in self.system_commands.items():
             print(f"\t{cmd}:\t{info['help']}")
 
-        print('\n')
+        print()
 
         for cmd, info in self.commands.items():
-            print(f"\t{cmd} [{info['args']}]:\t{info['help']}")
+            print(f"\t{cmd} {info['args']}:\t{info['help']}")
+
+    def show_help_commands(self):
+        for command_name in self.commands:
+            command_info = self.commands[command_name]
+
+            print(command_info['desc'])
+            print('Keys:')
+            print(f"\t{command_info.get('keys', '')}")
 
     def execute(self, command: str, *args):
+        command = command.strip()
+
+        if command.endswith('/help'):
+            help_command = command[:-5]
+            if help_command in self.commands:
+                self.show_help_commands()
+
         if command in self.system_commands:
             self.system_commands[command]['action']()
         elif command in self.commands:
