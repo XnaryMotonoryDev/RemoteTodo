@@ -33,11 +33,16 @@ if __name__ == "__main__":
 
     cmd = Command("Welcome to remote Todoist program. Enter the help for hint")
 
-    cmd.add_command('list', _help="List todos", description=
-                    "Print the names of all projects made. For more information use the info command", action=tracker.list_todos)
-    cmd.add_command('create', keys=['-t'], args=['name', 'id'], _help="Create todo", action=tracker.create_todos)
-    cmd.add_command('info',  _help="Check your tasks", action=tracker.show_propertiese)
-    cmd.add_command('delete', args=['id'], _help="Delete todo", action=tracker.delete_todo)
+    cmd.add_command('list', keys={
+        '-f': "Shows full information"
+    }, _help="List todos", action=tracker.list_todos)
+    cmd.add_command('create', keys={
+        '-t': 'Creates a global task',
+        '--project': 'Creates a task for a specific project'
+    }, args=['name', 'id'], _help="Create todo", action=tracker.create_todos)
+    cmd.add_command('delete', keys={
+        '-a': "Delete all project"
+    }, args=['name', 'id'], _help="Delete todo", action=tracker.delete_todo)
 
 
     while True:
