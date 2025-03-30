@@ -1,4 +1,4 @@
-from todoist_api_python.models import Project, Task
+from todoist_api_python.models import Project, Task, Section
 from todoist_api_python.api import TodoistAPI
 from todo_tracker import TodoTracker
 from commands import Command
@@ -38,8 +38,10 @@ if __name__ == "__main__":
     }, _help="List todos", action=tracker.list_todos)
     cmd.add_command('create', keys={
         '-t': 'Creates a global task',
-        '--project': 'Creates a task for a specific project'
-    }, args=['name', 'id'], _help="Create todo", action=tracker.create_todos)
+        '-s': 'Creates a section for a project',
+        '--project': 'Creates a task for a specific project',
+        '--section': 'Creates a section for a specific project',
+    }, args=['name', 'id'], _help="Create todo", action=tracker.create_todo)
     cmd.add_command('delete', keys={
         '-a': "Delete all project"
     }, args=['name', 'id'], _help="Delete todo", action=tracker.delete_todo)
@@ -61,5 +63,7 @@ if __name__ == "__main__":
                     print(f"Project created: {result.name}. (ID: {result.id})")
                 elif isinstance(result, Task):
                     print(f"Task created {result.content}")
+                elif isinstance(result, Section):
+                    print(f"Section created {result.name}")
             case 'list':
                 print(f"All available todos\n{result}" if result else "No project found.")
