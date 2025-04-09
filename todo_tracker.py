@@ -46,12 +46,11 @@ class TodoTracker:
         return self.todo.add_section(section_name, _id)
     
     def create_comment(self, *args: str) -> Comment:
-        comment = args[1]
-        project_name = args[2]
+        comment = ' '.join(args[2:])
+        project_name = args[1]
 
         task_id = self.__get_task_id(project_name)
-        _id = self.__get_project_id(project_name)
-        return self.todo.add_comment(comment, project_id=_id, task_id=task_id)
+        return self.todo.add_comment(comment, task_id=task_id)
 
     def list_todos(self, *args):
         projects = self.todo.get_projects()
