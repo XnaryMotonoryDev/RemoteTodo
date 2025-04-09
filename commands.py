@@ -1,8 +1,18 @@
+from dataclasses import dataclass
+
+
+@dataclass
 class Command():
     def __init__(self, description: str = None):
         self.description = description
         self.__show_description()
 
+        self.admin_command = {
+            'config': {
+                'help': "Show configuration",
+                'action': self.show_configuration
+            }
+        }
         self.system_commands = {
             'help': {
                 'help': "Output hint",
@@ -67,6 +77,19 @@ class Command():
 
             print()
 
+    def show_configuration(self, *args: str):
+        match args[0]:
+            case '--api-token':
+                ...
+            case '--autostrart':
+                match args[1].lower():
+                    case 'true':
+                        ...
+                    case 'false':
+                        ...
+            case _:
+                ...
+                
     def execute(self, command: str, *args):
         command = command.strip()
 
